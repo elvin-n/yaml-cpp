@@ -23,9 +23,9 @@ enum EMITTER_MANIP {
 
   // string manipulators
   // Auto, // duplicate
-  SingleQuoted,
-  DoubleQuoted,
-  Literal,
+  SingleQuotedS,
+  DoubleQuotedS,
+  LiteralS,
 
   // null manipulators
   LowerNull,
@@ -55,8 +55,8 @@ enum EMITTER_MANIP {
   // sequence manipulators
   BeginSeq,
   EndSeq,
-  Flow,
-  Block,
+  FlowS,
+  BlockS,
 
   // map manipulators
   BeginMap,

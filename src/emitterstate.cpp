@@ -18,8 +18,8 @@ EmitterState::EmitterState()
       m_indent(2),
       m_preCommentIndent(2),
       m_postCommentIndent(1),
-      m_seqFmt(Block),
-      m_mapFmt(Block),
+      m_seqFmt(BlockS),
+      m_mapFmt(BlockS),
       m_mapKeyFmt(Auto),
       m_floatPrecision(std::numeric_limits<float>::max_digits10),
       m_doublePrecision(std::numeric_limits<double>::max_digits10),
@@ -98,12 +98,12 @@ void EmitterState::StartedNode() {
 EmitterNodeType::value EmitterState::NextGroupType(
     GroupType::value type) const {
   if (type == GroupType::Seq) {
-    if (GetFlowType(type) == Block)
+    if (GetFlowType(type) == BlockS)
       return EmitterNodeType::BlockSeq;
     return EmitterNodeType::FlowSeq;
   }
 
-  if (GetFlowType(type) == Block)
+  if (GetFlowType(type) == BlockS)
     return EmitterNodeType::BlockMap;
   return EmitterNodeType::FlowMap;
 
@@ -146,7 +146,7 @@ void EmitterState::StartedGroup(GroupType::value type) {
   pGroup->modifiedSettings = std::move(m_modifiedSettings);
 
   // set up group
-  if (GetFlowType(type) == Block) {
+  if (GetFlowType(type) == BlockS) {
     pGroup->flowType = FlowType::Block;
   } else {
     pGroup->flowType = FlowType::Flow;
@@ -253,9 +253,9 @@ bool EmitterState::SetOutputCharset(EMITTER_MANIP value,
 bool EmitterState::SetStringFormat(EMITTER_MANIP value, FmtScope::value scope) {
   switch (value) {
     case Auto:
-    case SingleQuoted:
-    case DoubleQuoted:
-    case Literal:
+    case SingleQuotedS:
+    case DoubleQuotedS:
+    case LiteralS:
       _Set(m_strFmt, value, scope);
       return true;
     default:
@@ -354,8 +354,8 @@ bool EmitterState::SetPostCommentIndent(std::size_t value,
 bool EmitterState::SetFlowType(GroupType::value groupType, EMITTER_MANIP value,
                                FmtScope::value scope) {
   switch (value) {
-    case Block:
-    case Flow:
+    case BlockS:
+    case FlowS:
       _Set(groupType == GroupType::Seq ? m_seqFmt : m_mapFmt, value, scope);
       return true;
     default:
@@ -366,7 +366,7 @@ bool EmitterState::SetFlowType(GroupType::value groupType, EMITTER_MANIP value,
 EMITTER_MANIP EmitterState::GetFlowType(GroupType::value groupType) const {
   // force flow style if we're currently in a flow
   if (CurGroupFlowType() == FlowType::Flow)
-    return Flow;
+    return FlowS;
 
   // otherwise, go with what's asked of us
   return (groupType == GroupType::Seq ? m_seqFmt.get() : m_mapFmt.get());

@@ -277,14 +277,14 @@ StringFormat::value ComputeStringFormat(const std::string& str,
         return StringFormat::Plain;
       }
       return StringFormat::DoubleQuoted;
-    case SingleQuoted:
+    case SingleQuotedS:
       if (IsValidSingleQuotedScalar(str, escapeNonAscii)) {
         return StringFormat::SingleQuoted;
       }
       return StringFormat::DoubleQuoted;
-    case DoubleQuoted:
+    case DoubleQuotedS:
       return StringFormat::DoubleQuoted;
-    case Literal:
+    case LiteralS:
       if (IsValidLiteralScalar(str, flowType, escapeNonAscii)) {
         return StringFormat::Literal;
       }
